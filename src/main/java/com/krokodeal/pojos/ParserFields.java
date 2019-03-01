@@ -14,18 +14,21 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.krokodeal.pojos.EmailData.getSubject;
 public class ParserFields {
 
     public static File f;
     public static String src = System.getProperty("user.dir");
     public static List<String> listOfUEmails = new ArrayList<>();
+    private ArrayList<String> listOfParsedFields = new ArrayList<>();
 
     private static String parsedString = "";
     private static String search_text = "перчатки";
 
     private static String html = "";
-    private static String from_date = "30.11.2018";
-    private static String created_to = "29.03.2019";
+    //date format is "30.11.2018"
+    private static String from_date = "";
+    private static String created_to = "";
     private static String entriesOnPage = "30";
     private static String auc_num = "";
     private static String okrb = "";
@@ -35,6 +38,27 @@ public class ParserFields {
     private static String request_end_to = "";
 
     public ParserFields() {
+    }
+
+    public ArrayList<String> getListOfParsedFields() {
+        return listOfParsedFields;
+    }
+
+//    public void setListOfParsedFields(List<String> listOfParsedFields) {
+//        this.listOfParsedFields = listOfParsedFields;
+//    }
+    public void setListOfParsedFields() {
+            listOfParsedFields.add(getSubject());
+            listOfParsedFields.add(getSearch_text());
+            listOfParsedFields.add(getAuc_num());
+            listOfParsedFields.add(getOkrb());
+            listOfParsedFields.add(getCompany_title());
+            listOfParsedFields.add(getPeriod());
+            listOfParsedFields.add(getFrom_date());
+            listOfParsedFields.add(getCreated_to());
+            listOfParsedFields.add(getRequest_end_from());
+            listOfParsedFields.add(getRequest_end_to());
+            listOfParsedFields.add(getEntriesOnPage());
     }
 
     public static String getSearch_text() {
@@ -76,13 +100,15 @@ public class ParserFields {
     public static void setRequest_end_to(LocalDate date) {
         ParserFields.request_end_to = date.format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
     }
-
+    public static void setRequest_end_to(String s) {
+        ParserFields.request_end_to = s;
+    }
     public static String getEntriesOnPage() {
         return entriesOnPage;
     }
 
-    public static void setEntriesOnPage(String entriesOnPage) {
-        ParserFields.entriesOnPage = entriesOnPage;
+    public static void setEntriesOnPage(String s) {
+        ParserFields.entriesOnPage = s;
     }
 
     public static String getAuc_num() {
@@ -123,6 +149,9 @@ public class ParserFields {
 
     public static void setRequest_end_from(LocalDate date) {
         ParserFields.request_end_from = date.format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
+    }
+    public static void setRequest_end_from(String s) {
+        ParserFields.request_end_from = s;
     }
 
     public static String getFinalHtmlString() {
@@ -170,9 +199,9 @@ public class ParserFields {
     }
 
     private static String getUrlQuery() throws UnsupportedEncodingException {
-        String search_text_forURL = getConvertedSearchText();
+//        String search_text_forURL = getConvertedSearchText();
         return "http://www.icetrade.by/search/auctions?" +
-                "search_text=" + search_text_forURL +
+                "search_text=" + getConvertedSearchText() +
                 "&zakup_type%5B1%5D=1" +
                 "&zakup_type%5B2%5D=1" +
                 "&auc_num=" + getAuc_num() +

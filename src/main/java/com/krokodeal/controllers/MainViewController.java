@@ -1,19 +1,14 @@
 package com.krokodeal.controllers;
 
 import com.krokodeal.MainApp;
-import com.krokodeal.pojos.EmailData;
+import com.krokodeal.pojos.ParserFields;
 import com.krokodeal.util.EmailUtil;
 import com.krokodeal.util.ScheduleUtil;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
-import javax.mail.Authenticator;
-import javax.mail.PasswordAuthentication;
-import javax.mail.Session;
-import java.io.IOException;
-
-import static com.krokodeal.pojos.EmailData.*;
+import static com.krokodeal.pojos.EmailData.setSubject;
 import static com.krokodeal.pojos.ParserFields.*;
 import static com.krokodeal.pojos.ScheduleFields.*;
 import static com.krokodeal.util.ScheduleUtil.setCommandToAddSchtasks;
@@ -229,8 +224,10 @@ public class MainViewController implements ScheduleUtil {
 
     @FXML
     private void createSchedule() {
+        ParserFields parserFields = new ParserFields();
+        parserFields.setListOfParsedFields();
         if (daylyFX.isSelected()) {
-            System.out.println(setCommandToAddSchtasks(getDaily(), getSelectedTime()));
+            System.out.println(setCommandToAddSchtasks(getDaily(), getSelectedTime(), parserFields.getListOfParsedFields()));
         } else if (MON.isSelected()
                 || TUE.isSelected()
                 || WED.isSelected()
@@ -238,7 +235,7 @@ public class MainViewController implements ScheduleUtil {
                 || FRI.isSelected()
                 || SUN.isSelected()
                 || SAT.isSelected()) {
-            System.out.println(setCommandToAddSchtasks(getSelectedTime(), getChosenDays()));
+            System.out.println(setCommandToAddSchtasks(getSelectedTime(), getChosenDays(), parserFields.getListOfParsedFields()));
         }
     }
 
@@ -291,33 +288,9 @@ public class MainViewController implements ScheduleUtil {
     }
 
     @FXML
-    public void sendEmail() {
-        try {
-            setParsedHtmlString();
-            System.out.println(getParsedHtmlString());
-        } catch (IOException e) {
-            System.out.println(" Can not parse IceTrade");
-        }
-        setFinalHtmlString();
-        System.out.println(getFinalHtmlString());
-        listOfUEmails.add("mybigoblako@gmail.com");
-        if (listOfUEmails.size() > 0) {
-            for (String toEmail : listOfUEmails
-                    ) {
-                System.out.println("SSLEmail Start");
-                EmailData emailData = new EmailData(getLogin(), getPassword());
-                Authenticator auth = new Authenticator() {
-                    //need override the getPasswordAuthentication method
-                    protected PasswordAuthentication getPasswordAuthentication() {
-                        return new PasswordAuthentication(getLogin(), getPassword());
-                    }
-                };
-                Session session = Session.getDefaultInstance(emailData.getProps(), auth);
-                System.out.println("Session created");
-                EmailUtil.sendEmail(session, toEmail, subjectFX.getText(), "html");
-            }
-            listOfUEmails.clear();
-        }
+    public void sendEmailButton() {
+        EmailUtil emailUtil = new EmailUtil();
+        emailUtil.sendEmail();
     }
 
     public void preView() {

@@ -5,15 +5,16 @@ import java.util.Properties;
 public class EmailData {
 
 
-    private static String login ="junit01@mail.ru";
-    private static String password ="bCgmwpmk9dwGAct";
-    private static String personalId ="test_123";
+    private  String login ="junit01@mail.ru";
+    private  String password ="bCgmwpmk9dwGAct";
+    private  String personalId ="test_123";
+    private  String emailWhomToSend ="mybigoblako@gmail.com";
     private static String subject ="";
-    private static Properties props;
+    private  Properties props;
 
-    public EmailData(String login, String password) {
-        EmailData.login = login;
-        EmailData.password = password;
+    public EmailData() {
+        this.login = login;
+        this.password = password;
         String smtpMailProvider = "smtp." + login.substring(login.indexOf("@") + 1, login.length());
         props = System.getProperties();
         props.put("mail.smtp.host", smtpMailProvider); //SMTP Host
@@ -27,6 +28,38 @@ public class EmailData {
         props.put("mail.smtp.ssl.trust", smtpMailProvider);
     }
 
+    public String getLogin() {
+        return login;
+    }
+
+    public void setLogin(String login) {
+        this.login = login;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getPersonalId() {
+        return personalId;
+    }
+
+    public void setPersonalId(String personalId) {
+        this.personalId = personalId;
+    }
+
+    public String getEmailWhomToSend() {
+        return emailWhomToSend;
+    }
+
+    public void setEmailWhomToSend(String emailWhomToSend) {
+        this.emailWhomToSend = emailWhomToSend;
+    }
+
     public static String getSubject() {
         return subject;
     }
@@ -35,32 +68,12 @@ public class EmailData {
         EmailData.subject = subject;
     }
 
-    public static String getPersonalId() {
-        return personalId;
-    }
-
-    public static void setPersonalId(String personalId) {
-        EmailData.personalId = personalId;
-    }
-
     public Properties getProps() {
         return props;
     }
 
-    public static String getLogin() {
-        return login;
-    }
-
-    public static void setLogin(String login) {
-        EmailData.login = login;
-    }
-
-    public static String getPassword() {
-        return password;
-    }
-
-    public static void setPassword(String password) {
-        EmailData.password = password;
+    public void setProps(Properties props) {
+        this.props = props;
     }
 
 }

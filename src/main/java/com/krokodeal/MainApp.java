@@ -3,6 +3,8 @@ package com.krokodeal;
 
 import com.krokodeal.controllers.MainViewController;
 import com.krokodeal.controllers.mailDialogController;
+import com.krokodeal.util.ConsoleArgsRunner;
+import com.krokodeal.util.EmailUtil;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -26,14 +28,24 @@ public class MainApp extends Application {
     }
 
     public static void main(String[] args) throws IOException {
+
+/*
+ * todo: here will be implementation of running program in console with args
+ *  which gives opportunity to put args from schedule to java program
+ *  for example "javac - jar C:\calc.jar Перчатки 22.02"
+ *  schtasks /Create /TN "KrokodealTask /TR " javac - jar C:\program.jar test 22.02" /ST 09:30 /d THU,FRI
+ */
+
         if (args.length == 0)
             launch(args);
         else {
-            for (String s : args
-                    ) {
-                System.out.println(s);
+            ConsoleArgsRunner argsRunner = new ConsoleArgsRunner();
+            EmailUtil emailUtil = new EmailUtil();
+            for (int argIndex = 0; argIndex < args.length; argIndex++) {
+                argsRunner.move(argIndex, args[argIndex]);
+                emailUtil.sendEmail();
+                System.exit(0);
             }
-            System.exit(0);
         }
     }
 
